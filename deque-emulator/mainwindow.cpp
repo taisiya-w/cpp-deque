@@ -26,7 +26,7 @@ MainWindow::~MainWindow() {
 void MainWindow::ApplyModel() {
     auto it = deque_model_.iterator;
     ui -> list_widget -> clear();
-    for (int i = 0; i < static_cast<int>(deque_model_.items.size()); i += 1) {
+    for (size_t i = 0; i < deque_model_.items.size(); i++) {
         QString item = QString("%1: %2").arg(i).arg(QString::fromStdString(deque_model_.items[i]));
         ui -> list_widget -> addItem(item);
     }
@@ -213,13 +213,7 @@ void MainWindow::on_btn_merge_sort_clicked() {
 
 void MainWindow::on_btn_merge_sOrT_clicked() {
     auto comp = [](const std::string& a, const std::string& b){
-        std::string a_lower = a;
-        std::string b_lower = b;
-        std::transform(a_lower.begin(), a_lower.end(), a_lower.begin(),
-                       [](unsigned char c) { return std::tolower(c); });
-        std::transform(b_lower.begin(), b_lower.end(), b_lower.begin(),
-                       [](unsigned char c) { return std::tolower(c); });
-        return a_lower < b_lower;
+        return QString::fromStdString(a).compare(QString::fromStdString(b), Qt::CaseInsensitive) < 0;
     };
     deque_model_.items = MergeSort(deque_model_.items, comp);
     deque_model_.iterator = deque_model_.items.begin();
